@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <rocks>
+    <rock Id="R1" name="Green Rock">
+      <generator>
+        <noise colordetail="100" detail="6.5" seed="21"/>
+        <!--                e,f,a,b,c,g-->
+        <points number="120">1,0,0,0,200,0</points>
+        <!--          a,b,c,d,e,f-->
+        <colors b="0,0,0,0,255,0" g="0,1,0,0,255,0" r="0,0,1,0,0,0" rx="true" ry="true"/>
+      </generator>
+    </rock>
+    <rock Id="R2" name="Yellow-Green Balls">
+      <generator>
+        <noise colordetail="100" detail="2.5" seed="01"/>
+        <!--                e,f,a,b,c,g-->
+        <points number="12">1,0,100,0,0,0</points>
+        <!--          a,b,c,d,e,f-->
+        <colors b="0,0,0,0,0,0" g="1,0,0,0,255,0" r="0,1,1,0,0,0" rx="true" ry="true"/>
+      </generator>
+    </rock>
+    <rock Id="rock_collection$Rock@7d19af40" name="rock_collection$Rock@7d19af40"> <generator> <noise detail="0.1199572" seed="28804"> </noise> <points number="69">0.25,2.3604863,18.721388,7.6711907,4.149964,15.314748</points> <colors a="0.035430484,8.104754E-6,0.007467485,0.3673828,1.6093678,235.9467,1.8" b="0.39902985,0.006034307,0.02392666,0.06540102,18.356573,35.787094,2.6999998" g="0.071965285,0.017047051,0.6170095,0.90501064,12.824224,83.17225,1.8" r="0.16467565,0.08212543,0.44378254,0.0030660923,60.943573,69.03236,2.6999998" rx="true" ry="true"/> </generator> </rock>
+  </rocks>
+</root>
