@@ -2,16 +2,19 @@ class Generator{
   int seed, colorSeed, number;
   float detail,colorDetail;
   boolean rx,ry;
+  float boringness;
   PointMatrix pm;
   ColorMatrix r,g,b,a;
   Generator(int s, int num, float nd, float cd, boolean rx, boolean ry, PointMatrix p, 
   ColorMatrix red, ColorMatrix green, ColorMatrix blue, ColorMatrix alpha){
     seed = s;detail=nd;colorDetail=cd;pm=p;r=red;g=green;b=blue;a=alpha;this.rx=rx;this.ry=ry;number=num;
   }
+  Generator(){}
 }
 
 Rock MakeRock(){
-  
+  float boringness = random(1);
+  boringness = 1-(boringness*boringness);
   //make values
   int seed = int(random(100000));
   int colorSeed = int(random(100000));
@@ -19,7 +22,7 @@ Rock MakeRock(){
   float nd = 1/detail;
   float colorDetail = random(200);
   float cd = 1/colorDetail;
-  int number = int(random(3,200));
+  int number = int(random(3,100));
   boolean rx = (random(1)>0.3);
   boolean ry = (random(1)>0.3);
   PointMatrix pm = randomPointMatrix();
@@ -28,9 +31,16 @@ Rock MakeRock(){
   ColorMatrix b = randomColorMatrix();
   ColorMatrix a = randomColorMatrix();
   
+  ColorMatrix bm = BoringMatrix(r,g,b);
+  
+  r = BoringMatrix(r,bm,boringness);
+  g = BoringMatrix(g,bm,boringness);
+  b = BoringMatrix(b,bm,boringness);
+
   Generator gen = new Generator(seed,number,detail,colorDetail,rx,ry,pm,
   r,g,b,a);
   gen.colorSeed = colorSeed;
+  gen.boringness = boringness;
   
   
   
@@ -121,3 +131,31 @@ ColorMatrix randomColorMatrix(){
 }
 
 // ---------- random color matrix
+
+// ---------- Make Boring
+
+ColorMatrix BoringMatrix(ColorMatrix r, ColorMatrix g, ColorMatrix b){
+  ColorMatrix bm = new ColorMatrix(
+    (r.X+g.X+b.X)/3,
+    (r.Y+g.Y+b.Y)/3,
+    (r.Min+g.Min+b.Min)/3,
+    (r.Max+g.Max+b.Max)/3,
+    (r.Noise+g.Noise+b.Noise)/3,
+    (r.Offset+g.Offset+b.Offset)/3,
+    (r.NoiseOffset+g.NoiseOffset+b.NoiseOffset)/3
+  );
+  return bm;
+}
+
+ColorMatrix BoringMatrix(ColorMatrix x, ColorMatrix bm, float b){
+  x.X = bm.X*b + x.X*(1-b);
+  x.Y = bm.Y*b + x.Y*(1-b);
+  x.Min = bm.Min*b + x.Min*(1-b);
+  x.Max = bm.Max*b + x.Max*(1-b);
+  x.Noise = bm.Noise*b + x.Noise*(1-b);
+  x.Offset = bm.Offset*b + x.Offset*(1-b);
+  x.NoiseOffset = bm.NoiseOffset*b + x.NoiseOffset*(1-b);
+  return x;
+}
+
+// ---------- Make Boring

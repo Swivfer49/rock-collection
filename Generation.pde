@@ -27,24 +27,30 @@ Rock loadRock(int index){
 // ---------- From XML
 
 Rock XMLGenerator(XML gen){  
+  Generator ge = new Generator();
   //the noise xml
   XML noiseXML = gen.getChild("noise");
   
   //xy multiplier
-  float nd = 1/noiseXML.getFloat("detail");
+  ge.detail = noiseXML.getFloat("detail");
+  float nd = 1/ge.detail;
   //color xy multiplier
-  float cd = 1/noiseXML.getFloat("colordetail");
+  ge.colorDetail = noiseXML.getFloat("colordetail");
+  float cd = 1/ge.colorDetail;
   //set the seed
-  noiseSeed(noiseXML.getInt("seed"));
+  ge.seed = noiseXML.getInt("seed");
+  noiseSeed(ge.seed);
   
   //the points xml
   XML pointsXML = gen.getChild("points");
   
   //number of points
   int numPoints = pointsXML.getInt("number");
+  ge.number = numPoints;
   
   //the matrix for points
   PointMatrix pm = new PointMatrix(pointsXML.getContent());
+  ge.pm = pm;
   
   //the pts
   RockPoint[] rps = new RockPoint[numPoints];
@@ -73,12 +79,19 @@ Rock XMLGenerator(XML gen){
   ColorMatrix red = new ColorMatrix(colorsXML.getString("r"));
   ColorMatrix green = new ColorMatrix(colorsXML.getString("g"));
   ColorMatrix blue = new ColorMatrix(colorsXML.getString("b"));
+  ge.r=red;ge.b=blue;ge.g=green;
   ColorMatrix alpha = null;
   if(colorsXML.hasAttribute("a"))
   alpha = new ColorMatrix(colorsXML.getString("a"));
+  ge.a=alpha;
 
-  if(noiseXML.hasAttribute("colorSeed"))
-  noiseSeed(noiseXML.getInt("colorSeed"));
+  if(noiseXML.hasAttribute("colorSeed")){
+    ge.colorSeed = noiseXML.getInt("colorSeed");
+    noiseSeed(ge.colorSeed);
+  }
+  
+  ge.rx = colorsXML.getString("rx").equals("true");
+  ge.ry = colorsXML.getString("ry").equals("true");
   
   //each pixel
   for(int x=0;x<255;x++){
@@ -87,9 +100,9 @@ Rock XMLGenerator(XML gen){
       //which xy to set
       int x2 = x;
       int y2 = y;
-      if(colorsXML.getString("rx").equals("true"))
+      if(ge.rx)
       x2 = 254 - x;
-      if(colorsXML.getString("ry").equals("true"))
+      if(ge.rx)
       y2 = 254 - y;
       
       //get the rgb
@@ -115,6 +128,7 @@ Rock XMLGenerator(XML gen){
   r.image = im;
   r.Id = gen.getParent().getString("Id");
   r.Name = gen.getParent().getString("name");
+  r.g=ge;
   return r;
 }
 

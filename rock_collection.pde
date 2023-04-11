@@ -33,6 +33,7 @@ void mouseClicked(){
     background(255);
     r.display(500,500); 
     fill(0);
+    text(r.g.boringness,20,20);
     image(r.image,1000-255,0);
   }else{
     if(mouseX<500){

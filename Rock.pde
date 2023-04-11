@@ -8,6 +8,9 @@ class Rock{
   String Name, Id;
   Generator g = null;
   
+  private boolean IsDrawn = false;
+  private PImage RockImage;
+  
   Rock(RockPoint[] pts){
     points = pts;
     image = createImage(255,255,RGB);
@@ -17,16 +20,34 @@ class Rock{
       }
     }
   }
-  
+  private void RenderRock(){
+    float minx = 1000,miny=1000,maxx=-1000,maxy=-1000;
+    for(int i=0;i<points.length;i++){
+      minx = min(minx,points[i].Point.x);
+      miny = min(miny,points[i].Point.y);
+      maxx = max(maxx,points[i].Point.x);
+      maxy = max(maxy,points[i].Point.y);
+    }
+    PGraphics gr = createGraphics(int(maxx-minx),int(maxy-miny));
+    int hh = gr.height/2,hw=gr.width/2;
+    gr.beginDraw();
+    gr.noStroke();
+    gr.beginShape();
+    gr.texture(image);
+    for(int i=0;i<points.length;i++){
+      gr.vertex(hw+points[i].Point.x,hh+points[i].Point.y,points[i].rP.x,points[i].rP.y);
+    }
+    gr.endShape(CLOSE);
+    gr.endDraw();
+    RockImage = gr.copy();
+  }
   
   void display(int x,int y){
-    noStroke();
-      beginShape();
-      texture(image);
-      for(int i=0;i<points.length;i++){
-        vertex(x+points[i].Point.x,y+points[i].Point.y,points[i].rP.x,points[i].rP.y);
-      }
-      endShape(CLOSE);
+    if(!IsDrawn){
+      RenderRock();
+    }
+    image(RockImage,x-RockImage.width/2,y-RockImage.height/2);
+    
   }
   
   XML toXML(){
@@ -36,7 +57,7 @@ class Rock{
     noise.setInt("seed",g.seed);
     noise.setInt("colorSeed",g.colorSeed);
     noise.setFloat("detail",g.detail);
-    noise.setFloat("detail",g.detail);
+    noise.setFloat("colordetail",g.colorDetail);
     XML pts = roc.getChild("generator").getChild("points");
     pts.setInt("number",g.number);
     pts.setContent(g.pm.string());
