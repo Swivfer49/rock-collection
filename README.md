@@ -2,6 +2,17 @@
 
 A game where you can collect randomly generated rocks
 
+## Planned features
+
+- Rock Physics
+- Improved rock generation
+- Rock gardens
+- Rock petting
+- Rock decorating
+- Glowing rocks
+
+I plan to redo this project on Unity
+
 ## Controls so far
 
 click near the bottom - swap between load and generate modes
